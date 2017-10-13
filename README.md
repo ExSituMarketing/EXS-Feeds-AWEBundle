@@ -1,4 +1,4 @@
-# EXS-FeedsCambuilderBundle
+# EXS-FeedsAWEBundle
 
 ## Install
 
