@@ -390,7 +390,7 @@ XML;
     {
         $memcached = $this->prophesize(\Memcached::class);
         $memcached->get('AWELivePerformers')->willReturn(false)->shouldBeCalledTimes(1);
-        $memcached->set('AWELivePerformers', $this->arrayResponse, 120)->shouldBeCalledTimes(1);
+        $memcached->set('AWELivePerformers', $this->arrayResponse, 300)->shouldBeCalledTimes(1);
 
         $body = $this->prophesize(StreamInterface::class);
         $body->getContents()->willReturn($this->rawResponse)->shouldBeCalledTimes(1);
@@ -419,7 +419,6 @@ XML;
     {
         $memcached = $this->prophesize(\Memcached::class);
         $memcached->get('AWELivePerformers')->willReturn(false)->shouldBeCalledTimes(1);
-        $memcached->set('AWELivePerformers', [], 120)->shouldBeCalledTimes(1);
 
         $httpClient = $this->prophesize(Client::class);
         $httpClient->get('http://live-cams-2.livejasmin.com/allonline/?site=jsm&psid=rabbit&campaign_id=34751&pstour=t1&psprogram=REVS&landing_page=freechat&image_count=5&image_size=full&flags=1&willingness=1&allmodels=0', [

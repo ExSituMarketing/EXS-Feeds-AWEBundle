@@ -24,45 +24,47 @@ class FeedsReader
     /**
      * @var int
      */
-    private $cacheTtl;
+    private $defaultTtl;
 
     /**
      * FeedsReader constructor.
      *
      * @param \Memcached $memcached
      * @param Client     $httpClient
-     * @param int        $cacheTtl
+     * @param int        $defaultTtl
      */
-    public function __construct(\Memcached $memcached, Client $httpClient, $cacheTtl = 120)
+    public function __construct(\Memcached $memcached, Client $httpClient, $defaultTtl = 300)
     {
         $this->memcached = $memcached;
         $this->httpClient = $httpClient;
-        $this->cacheTtl = $cacheTtl;
+        $this->defaultTtl = $defaultTtl;
     }
 
     /**
+     * Returns an array of live performer ids.
+     *
      * @return array
      */
     public function getLivePerformers()
     {
-        $cacheKey = $this->getCacheKey();
-
         if (
-            (false === $performers = $this->memcached->get($cacheKey))
+            (false === $performers = $this->memcached->get($this->getCacheKey()))
             || empty($performers)
         ) {
             $performers = $this->refreshLivePerformers();
-
-            $this->memcached->set($cacheKey, $performers, $this->cacheTtl);
         }
 
         return $performers;
     }
 
     /**
+     * Requests live performers from AWE api, extracts the performer ids and set the result in cache.
+     *
+     * @param int $ttl
+     *
      * @return array
      */
-    private function refreshLivePerformers()
+    public function refreshLivePerformers($ttl = null)
     {
         $performers = [];
 
@@ -78,10 +80,12 @@ class FeedsReader
 
                 $content = new \SimpleXMLElement($responseContent);
 
-                foreach ($content->xpath('category/performerinfo/performerid') as $performerid) {
-                    $performers[] = (string)$performerid;
+                foreach ($content->xpath('category/performerinfo/performerid') as $performerId) {
+                    $performers[] = (string)$performerId;
                 }
             }
+
+            $this->memcached->set($this->getCacheKey(), $performers, $ttl ?: $this->defaultTtl);
         } catch (\Exception $e) {
             $performers = [];
         }
@@ -90,6 +94,8 @@ class FeedsReader
     }
 
     /**
+     * Returns the cache key.
+     *
      * @return string
      */
     private function getCacheKey()
