@@ -2,32 +2,36 @@
 
 [![Build Status](https://travis-ci.org/ExSituMarketing/EXS-FeedsAWEBundle.svg?branch=master)](https://travis-ci.org/ExSituMarketing/EXS-FeedsAWEBundle)
 
-## Install
+## Installation
 
-Require the bundle from packagist
+This bundle uses [PHP's native Memcached objects](http://php.net/manual/en/class.memcached.php).
+
+**Make sure the memcached module is enabled in your PHP's installation.**
+
+Require the bundle using composer
 ```
 $ composer require exs/feeds-awe-bundle
 ```
 
-Enable the bundle in AppKernel
+Enable it in your application's AppKernel
 ```php
 <?php
-...
+// app/AppKernel.php
+
 class AppKernel extends Kernel
 {
-    ...
+    // ...
     public function registerBundles()
     {
         $bundles = array(
-            ...
+            // ...
             new EXS\FeedsAWEBundle\EXSFeedsAWEBundle(),
         );
     }
-    ...
 }
 ```
 
-## Config
+## Configuration
 
 Some configuration is available to manage the cache.
 
@@ -49,7 +53,7 @@ $performerIds = $container
 ;
 ```
 
-A command is also available if you want to force refresh the cache.
+A command is also available if you want to force refresh the memcached record.
 
 ```bash
 $ app/console feeds:awe:refresh-live-performers --env=prod --no-debug
