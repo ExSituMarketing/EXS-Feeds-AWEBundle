@@ -1,5 +1,7 @@
 # EXS-FeedsAWEBundle
 
+[![Build Status](https://travis-ci.org/ExSituMarketing/EXS-FeedsAWEBundle.svg?branch=master)](https://travis-ci.org/ExSituMarketing/EXS-FeedsAWEBundle)
+
 ## Install
 
 Require the bundle from packagist
