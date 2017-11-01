@@ -58,3 +58,6 @@ A command is also available if you want to force refresh the memcached record.
 ```bash
 $ app/console feeds:awe:refresh-live-performers --env=prod --no-debug
 ```
+```
+$ app/console feeds:cambuilder:refresh-live-performers --limit=500 --ttl=3600 --env=prod --no-debug
+```
